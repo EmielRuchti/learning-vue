@@ -50,9 +50,35 @@ const childeren = computed(() => {
 });
 
 import ParentComponent from './components/ParentComponent.vue';
+
+const count = reactive({
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
+    6: 0,
+});
+
+const clearCount = () => {
+    for (let i = 1; i < 7; i++) {
+        count[i] = 0;
+    }
+};
+
+const rolldice = () => {
+    clearCount();
+    for (let i = 0; i < 8; i++) {
+        let randomNumber = Math.ceil(Math.random() * 6);
+        count[randomNumber]++;
+    }
+};
 </script>
 
 <template>
+    <p v-for="(item, index) in count" :key="index">{{ index }}: {{ item }}</p>
+    <button @click="rolldice">Gooi!</button>
+
     <ParentComponent></ParentComponent>
 
     <h1>Clicks + voornaam & Land</h1>
