@@ -11,20 +11,18 @@ dices.value = {
     6: 0,
 };
 
-const scores = reactive({
-    threeOfAKind: 0,
-    fourOfAKind: 0,
-    smallStraight: 0,
-    largeStraight: 0,
-    fullHouse: 0,
-    yahtzee: 0,
-    chance: 0,
-});
-
 const totalPart1 = computed(() => {
     let total = 0;
     for (const key in dices.value) {
         total += dices.value[key] * key;
+    }
+    return total;
+});
+
+const totalPart2 = computed(() => {
+    let total = 0;
+    for (const key in addScoresPart2.value) {
+        total += addScoresPart2.value[key].score;
     }
     return total;
 });
@@ -54,13 +52,20 @@ const checkStraight = size => {
     return false;
 };
 
-const addScoresPart2 = computed(() => {
-    scores.threeOfAKind = checkOfAKind(3) ? totalPart1 : 0; //Check 3 of a kind
+let addScoresPart2 = computed(() => {
+    const scoresPart2 = reactive([]);
+    scoresPart2.push({name: 'Three of a kind', score: checkOfAKind(3) ? totalPart1.value : 0});
+    scoresPart2.push({name: 'Four of a kind', score: checkOfAKind(4) ? totalPart1.value : 0});
+    scoresPart2.push({name: 'Small Straight', score: checkStraight(4) ? 30 : 0});
+    scoresPart2.push({name: 'Large Straight', score: checkStraight(5) ? 40 : 0});
+    scoresPart2.push({name: 'Full House', score: checkOfAKind(2) && checkOfAKind(3) ? 25 : 0});
+    scoresPart2.push({name: 'Yahtzee', score: checkOfAKind(5) ? 50 : 0});
+    scoresPart2.push({name: 'Chance', score: totalPart1.value});
+    return scoresPart2;
 });
 </script>
 
 <template>
-    <p>{{ addScoresPart2 }}</p>
     <span>
         <table>
             <thead>
@@ -94,33 +99,9 @@ const addScoresPart2 = computed(() => {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Three of a kind</td>
-                    <td>{{ addScoresPart2[0] }}</td>
-                </tr>
-                <tr>
-                    <td>Four of a kind</td>
-                    <td>{{ addScoresPart2[1] }}</td>
-                </tr>
-                <tr>
-                    <td>Small straight</td>
-                    <td>{{ addScoresPart2[2] }}</td>
-                </tr>
-                <tr>
-                    <td>Large straight</td>
-                    <td>{{ addScoresPart2[3] }}</td>
-                </tr>
-                <tr>
-                    <td>Full house</td>
-                    <td>{{ addScoresPart2[4] }}</td>
-                </tr>
-                <tr>
-                    <td>Yahtzee</td>
-                    <td>{{ addScoresPart2[5] }}</td>
-                </tr>
-                <tr>
-                    <td>Chance</td>
-                    <td>{{ addScoresPart2[6] }}</td>
+                <tr v-for="(item, index) in addScoresPart2" :key="index">
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.score }}</td>
                 </tr>
                 <tr>
                     <td><strong>Totaal Deel 1</strong></td>
@@ -128,13 +109,13 @@ const addScoresPart2 = computed(() => {
                 </tr>
                 <tr>
                     <td><strong>Totaal Deel 2</strong></td>
-                    <td></td>
+                    <td>{{ totalPart2 }}</td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
                     <td><strong>Total</strong></td>
-                    <td></td>
+                    <td>{{ totalPart1 + totalPart2 }}</td>
                 </tr>
             </tfoot>
         </table>
