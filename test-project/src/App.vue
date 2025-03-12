@@ -2,7 +2,7 @@
 import ThrowDices from './components/ThrowDices.vue';
 import ScoreTable from './components/ScoreTable.vue';
 
-import {ref, reactive, computed} from 'vue';
+import {ref} from 'vue';
 
 const dices = ref();
 </script>

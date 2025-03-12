@@ -1,5 +1,5 @@
 <script setup>
-import {ref, computed, reactive} from 'vue';
+import {computed, reactive} from 'vue';
 
 const dices = defineModel('dice');
 dices.value = {
@@ -52,7 +52,7 @@ const checkStraight = size => {
     return false;
 };
 
-let addScoresPart2 = computed(() => {
+const addScoresPart2 = computed(() => {
     const scoresPart2 = reactive([]);
     scoresPart2.push({name: 'Three of a kind', score: checkOfAKind(3) ? totalPart1.value : 0});
     scoresPart2.push({name: 'Four of a kind', score: checkOfAKind(4) ? totalPart1.value : 0});
