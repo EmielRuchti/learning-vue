@@ -77,3 +77,22 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.rollingDice {
+  display: inline-block;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 10px;
+}
+
+th,
+td {
+  border: 1px solid;
+  padding: 10px;
+}
+
+span {
+  display: inline-block;
+}
