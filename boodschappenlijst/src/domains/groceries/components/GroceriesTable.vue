@@ -34,7 +34,7 @@ const totalCost = computed(() => {
                 </td>
                 <td>{{ item.sub_total.toFixed(2) }}</td>
                 <td>
-                    <RouterLink :to="{path: '/edit/', query: {id: item.id}}">Bewerk</RouterLink>
+                    <RouterLink :to="{name: 'edit', params: {id: item.id}}">Bewerk</RouterLink>
                 </td>
             </tr>
         </tbody>
