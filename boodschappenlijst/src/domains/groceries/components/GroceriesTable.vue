@@ -1,16 +1,23 @@
 <script setup>
-import {reactive, computed} from 'vue';
+import {ref, computed} from 'vue';
+import {removeGrocery} from './../store';
 
 const groceries = defineModel('groceryList');
+const subTotals = ref([0, 0, 0, 0]);
+
+const calcSubTotals = computed(() => {
+    subTotals.value.splice(0);
+    for (const key in groceries.value) {
+        subTotals.value.push(groceries.value[key].price * groceries.value[key].count);
+    }
+    return subTotals;
+});
 
 const totalCost = computed(() => {
-    let total = 0;
-    for (const key in groceries.value) {
-        let subTotal = groceries.value[key].price * groceries.value[key].count;
-        total += subTotal;
-        groceries.value[key].sub_total = subTotal;
-    }
-    return total;
+    if (groceries.value.length == 0) return 0;
+    return subTotals.value.reduce((total, item) => {
+        return total + item;
+    });
 });
 </script>
 
@@ -22,7 +29,7 @@ const totalCost = computed(() => {
                 <th>Prijs</th>
                 <th>Aantal</th>
                 <th>Subtotaal</th>
-                <th>Acties</th>
+                <th colspan="2">Acties</th>
             </tr>
         </thead>
         <tbody>
@@ -32,9 +39,12 @@ const totalCost = computed(() => {
                 <td>
                     <input type="number" v-model="item.count" placeholder="Type aantal..." />
                 </td>
-                <td>{{ item.sub_total.toFixed(2) }}</td>
+                <td>{{ calcSubTotals.value[index].toFixed(2) }}</td>
                 <td>
                     <RouterLink :to="{name: 'edit', params: {id: item.id}}">Bewerk</RouterLink>
+                </td>
+                <td>
+                    <button @click="removeGrocery(index)">Verwijder</button>
                 </td>
             </tr>
         </tbody>

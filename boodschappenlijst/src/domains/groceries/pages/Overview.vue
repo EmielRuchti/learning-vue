@@ -1,5 +1,4 @@
 <script setup>
-import {reactive} from 'vue';
 import GroceriesTable from './../components/GroceriesTable.vue';
 import {getAllGroceries} from './../store';
 
