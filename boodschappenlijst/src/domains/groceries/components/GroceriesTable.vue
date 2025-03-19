@@ -3,21 +3,13 @@ import {ref, computed} from 'vue';
 import {removeGrocery} from './../store';
 
 const groceries = defineModel('groceryList');
-const subTotals = ref([0, 0, 0, 0]);
-
-const calcSubTotals = computed(() => {
-    subTotals.value.splice(0);
-    for (const key in groceries.value) {
-        subTotals.value.push(groceries.value[key].price * groceries.value[key].count);
-    }
-    return subTotals;
-});
 
 const totalCost = computed(() => {
-    if (groceries.value.length == 0) return 0;
-    return subTotals.value.reduce((total, item) => {
-        return total + item;
-    });
+    let total = 0;
+    for (const item of groceries.value) {
+        total += item.price * item.count;
+    }
+    return total;
 });
 </script>
 
@@ -39,7 +31,7 @@ const totalCost = computed(() => {
                 <td>
                     <input type="number" v-model="item.count" placeholder="Type aantal..." />
                 </td>
-                <td>{{ calcSubTotals.value[index].toFixed(2) }}</td>
+                <td>{{ (item.price * item.count).toFixed(2) }}</td>
                 <td>
                     <RouterLink :to="{name: 'edit', params: {id: item.id}}">Bewerk</RouterLink>
                 </td>
